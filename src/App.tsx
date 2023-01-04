@@ -1,5 +1,9 @@
 /**
  * @desc : Drag and Drop 사용
+ * @TODO:
+ *
+ * @FIXME:
+ * 1. 드라그앤드라십 원하는 위치에 정렬하기
  */
 
 import {
@@ -15,13 +19,21 @@ import { toDoState } from "./atoms";
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
 
-  const onDragEnd = ({ destination, source }: DropResult) => {
-    let atomArr = [...toDos];
-    let dragArr = atomArr.splice(source.index, 1);
-    atomArr.splice(Number(destination?.index), 0, dragArr[0]);
-    setToDos(atomArr);
-    console.log(atomArr);
+  /* NOTE: 원하는 위치에 정렬:
+    DragDropContext onDragEnd 매개변수에서 현재위치, 이동할 위치, 이동할 아이템 받아옴 
+  */
+  const onDragEnd = ({ destination, source, draggableId }: DropResult) => {
+    if (!destination) return; // 이동할 위치가 없으면 return (type error 방지)
+    // NOTE: setter에서 현재 상태를 복사한 뒤, splice로 이동할 아이템을 삭제하고, 이동할 위치에 아이템을 추가
+    setToDos((curr) => {
+      const copyToDos = [...curr];
+      copyToDos.splice(source.index, 1);
+      copyToDos.splice(destination?.index, 0, draggableId);
+      return copyToDos;
+    });
   };
+
+  // FIXME: 드랍할 때마다 Card 재렌더링 성능저하 문제
 
   return (
     // DragDropContext
@@ -35,7 +47,7 @@ function App() {
               <Board ref={provided.innerRef} {...provided.droppableProps}>
                 {/* Draggable */}
                 {toDos.map((toDo, index) => (
-                  <Draggable draggableId={toDo} index={index} key={index}>
+                  <Draggable key={toDo} draggableId={toDo} index={index}>
                     {(provided) => (
                       <Card
                         ref={provided.innerRef}
