@@ -2,13 +2,26 @@
  * @desc : Drag and Drop 사용
  */
 
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "react-beautiful-dnd";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import { toDoState } from "./atoms";
 
 function App() {
-  const onDragEnd = () => {};
+  const [toDos, setToDos] = useRecoilState(toDoState);
 
-  const toDos = ["a", "b", "c", "d", "e", "f"];
+  const onDragEnd = ({ destination, source }: DropResult) => {
+    let atomArr = [...toDos];
+    let dragArr = atomArr.splice(source.index, 1);
+    atomArr.splice(Number(destination?.index), 0, dragArr[0]);
+    setToDos(atomArr);
+    console.log(atomArr);
+  };
 
   return (
     // DragDropContext
