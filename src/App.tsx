@@ -12,13 +12,14 @@
  * @FIXME:
  * 1. 드라그앤드라십 원하는 위치에 정렬하기
  * 2. 드랍할 때마다 Card 재렌더링 성능저하 문제
+ * 3. 상태값 Object로 바뀐경우, 배열로 바꾸기
  */
 
-import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { toDoState } from "./atoms";
-import DraggableCard from "./components/DraggableCard";
+import Board from "./components/Board";
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
@@ -29,12 +30,12 @@ function App() {
   const onDragEnd = ({ destination, source, draggableId }: DropResult) => {
     if (!destination) return; // 이동할 위치가 없으면 return (type error 방지)
     // NOTE: setter에서 현재 상태를 복사한 뒤, splice로 이동할 아이템을 삭제하고, 이동할 위치에 아이템을 추가
-    setToDos((curr) => {
+    /* setToDos((curr) => {
       const copyToDos = [...curr];
       copyToDos.splice(source.index, 1);
       copyToDos.splice(destination?.index, 0, draggableId);
       return copyToDos;
-    });
+    }); */
   };
 
   // FIXME: 드랍할 때마다 Card 재렌더링 성능저하 문제
@@ -46,17 +47,10 @@ function App() {
         <h1>🆃rello</h1>
         <Boards>
           {/* Droppable */}
-          <Droppable droppableId="one">
-            {(provided) => (
-              <Board ref={provided.innerRef} {...provided.droppableProps}>
-                {/* Draggable */}
-                {toDos.map((toDo, index) => (
-                  <DraggableCard key={toDo} toDo={toDo} index={index} />
-                ))}
-                {provided.placeholder}
-              </Board>
-            )}
-          </Droppable>
+          {/* FIXME: Object로 상태가 바뀌어서 배열형태로 바꿔줘야 함 */}
+          {Object.keys(toDos).map((boardId) => (
+            <Board key={boardId} boardId={boardId} toDos={toDos[boardId]} />
+          ))}
         </Boards>
       </Wrapper>
     </DragDropContext>
@@ -69,7 +63,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  max-width: 480px;
+  max-width: 680px;
   margin: 0 auto;
   width: 100%;
   height: 100vh;
@@ -84,16 +78,9 @@ const Wrapper = styled.div`
 
 const Boards = styled.div`
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-gap: 10px;
   width: 100%;
-`;
-
-const Board = styled.div`
-  background-color: ${(props) => props.theme.boardColor};
-  padding: 20px;
-  border-radius: 10px;
-  min-height: 200px;
 `;
 
 export default App;

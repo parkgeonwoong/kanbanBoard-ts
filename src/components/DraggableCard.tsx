@@ -13,7 +13,8 @@ interface IDraggableCard {
 }
 
 function DraggableCard({ toDo, index }: IDraggableCard) {
-  console.log(toDo, "rendered");
+  // NOTE: console.log(toDo, " :랜더링 이슈 확인");
+
   return (
     <Draggable key={toDo} draggableId={toDo} index={index}>
       {(provided) => (
