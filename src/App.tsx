@@ -1,25 +1,29 @@
 /**
  * @desc : Drag and Drop 사용
  * @TODO:
+ * 1. react-beautiful-dnd 이용해보기
+ * - DragDropContext : 드래그앤드랍을 사용할 컴포넌트
+ * - Droppable : 드랍할 컴포넌트, Draggable에 의해 드랍(dropped)될 수 있다.
+ * - Draggable : 드래그할 컴포넌트, Droppable에 드래그 및 드래그 할 수 있다.
+ * 2. Recoil 이용해보기
+ * - onDragEnd을 이용해 Setter값 변경
+ * 3. 리펙토링
  *
  * @FIXME:
  * 1. 드라그앤드라십 원하는 위치에 정렬하기
+ * 2. 드랍할 때마다 Card 재렌더링 성능저하 문제
  */
 
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  DropResult,
-} from "react-beautiful-dnd";
+import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { toDoState } from "./atoms";
+import DraggableCard from "./components/DraggableCard";
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
 
-  /* NOTE: 원하는 위치에 정렬:
+  /* FIXME: 원하는 위치에 정렬:
     DragDropContext onDragEnd 매개변수에서 현재위치, 이동할 위치, 이동할 아이템 받아옴 
   */
   const onDragEnd = ({ destination, source, draggableId }: DropResult) => {
@@ -47,17 +51,7 @@ function App() {
               <Board ref={provided.innerRef} {...provided.droppableProps}>
                 {/* Draggable */}
                 {toDos.map((toDo, index) => (
-                  <Draggable key={toDo} draggableId={toDo} index={index}>
-                    {(provided) => (
-                      <Card
-                        ref={provided.innerRef}
-                        {...provided.dragHandleProps}
-                        {...provided.draggableProps}
-                      >
-                        {toDo}
-                      </Card>
-                    )}
-                  </Draggable>
+                  <DraggableCard key={toDo} toDo={toDo} index={index} />
                 ))}
                 {provided.placeholder}
               </Board>
@@ -100,13 +94,6 @@ const Board = styled.div`
   padding: 20px;
   border-radius: 10px;
   min-height: 200px;
-`;
-
-const Card = styled.div`
-  background-color: ${(props) => props.theme.cardColor};
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 10px;
 `;
 
 export default App;
