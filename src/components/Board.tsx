@@ -18,7 +18,11 @@ function Board({ toDos, boardId }: IBoardProps) {
       <Title>{boardId}</Title>
       <Droppable droppableId={boardId}>
         {(provided) => (
-          <div ref={provided.innerRef} {...provided.droppableProps}>
+          <div
+            style={{ backgroundColor: "#dcdde1" }}
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
             {/* Draggable */}
             {toDos.map((toDo, index) => (
               <DraggableCard key={toDo} toDo={toDo} index={index} />
@@ -36,6 +40,7 @@ const Wrapper = styled.div`
   padding: 20px 10px;
   border-radius: 10px;
   min-height: 200px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 `;
 
 const Title = styled.h2`

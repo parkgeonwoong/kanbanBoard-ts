@@ -8,7 +8,7 @@ interface IToDoState {
 export const toDoState = atom<IToDoState>({
   key: "toDo",
   default: {
-    "To Do": ["a", "b"],
+    "To Do": ["a", "b"], // 이렇게 한 이유는 타이틀로 가지고 올때, 띄어쓰기 할려고
     Acitive: ["c", "d", "e"],
     Done: ["f"],
   },

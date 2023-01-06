@@ -30,6 +30,7 @@ function App() {
   const onDragEnd = (info: DropResult) => {
     console.log(info);
     const { destination, source, draggableId } = info;
+    if (!destination) return;
 
     // 같은 보드에서 드랍할 때
     if (destination?.droppableId === source.droppableId) {
@@ -38,9 +39,26 @@ function App() {
         const boardCopy = [...allBoards[source.droppableId]];
         boardCopy.splice(source.index, 1);
         boardCopy.splice(destination?.index, 0, draggableId);
+
         return {
           ...allBoards,
           [source.droppableId]: boardCopy,
+        };
+      });
+    }
+
+    // 다른 보드로 드랍할 때
+    if (destination?.droppableId !== source.droppableId) {
+      setToDos((allBoards) => {
+        const dragItem = [...allBoards[source.droppableId]];
+        const dropItem = [...allBoards[destination.droppableId]];
+        dragItem.splice(source.index, 1);
+        dropItem.splice(destination.index, 0, draggableId);
+
+        return {
+          ...allBoards,
+          [source.droppableId]: dragItem,
+          [destination.droppableId]: dropItem,
         };
       });
     }
@@ -71,7 +89,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  max-width: 80vw;
+  max-width: 60vw;
   margin: 0 auto;
   width: 100%;
   height: 100vh;
