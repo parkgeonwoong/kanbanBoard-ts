@@ -14,25 +14,35 @@ interface IBoardProps {
 
 function Board({ toDos, boardId }: IBoardProps) {
   return (
-    <Droppable droppableId={boardId}>
-      {(provided) => (
-        <BoardWrapper ref={provided.innerRef} {...provided.droppableProps}>
-          {/* Draggable */}
-          {toDos.map((toDo, index) => (
-            <DraggableCard key={toDo} toDo={toDo} index={index} />
-          ))}
-          {provided.placeholder}
-        </BoardWrapper>
-      )}
-    </Droppable>
+    <Wrapper>
+      <Title>{boardId}</Title>
+      <Droppable droppableId={boardId}>
+        {(provided) => (
+          <div ref={provided.innerRef} {...provided.droppableProps}>
+            {/* Draggable */}
+            {toDos.map((toDo, index) => (
+              <DraggableCard key={toDo} toDo={toDo} index={index} />
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </Wrapper>
   );
 }
-
-const BoardWrapper = styled.div`
+const Wrapper = styled.div`
+  /* width: 300px; */
   background-color: ${(props) => props.theme.boardColor};
-  padding: 20px;
+  padding: 20px 10px;
   border-radius: 10px;
   min-height: 200px;
+`;
+
+const Title = styled.h2`
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 18px;
 `;
 
 export default Board;

@@ -27,15 +27,23 @@ function App() {
   /* FIXME: 원하는 위치에 정렬:
     DragDropContext onDragEnd 매개변수에서 현재위치, 이동할 위치, 이동할 아이템 받아옴 
   */
-  const onDragEnd = ({ destination, source, draggableId }: DropResult) => {
-    if (!destination) return; // 이동할 위치가 없으면 return (type error 방지)
-    // NOTE: setter에서 현재 상태를 복사한 뒤, splice로 이동할 아이템을 삭제하고, 이동할 위치에 아이템을 추가
-    /* setToDos((curr) => {
-      const copyToDos = [...curr];
-      copyToDos.splice(source.index, 1);
-      copyToDos.splice(destination?.index, 0, draggableId);
-      return copyToDos;
-    }); */
+  const onDragEnd = (info: DropResult) => {
+    console.log(info);
+    const { destination, source, draggableId } = info;
+
+    // 같은 보드에서 드랍할 때
+    if (destination?.droppableId === source.droppableId) {
+      // NOTE: setter에서 현재 상태를 복사한 뒤, splice로 이동할 아이템을 삭제하고, 이동할 위치에 아이템을 추가
+      setToDos((allBoards) => {
+        const boardCopy = [...allBoards[source.droppableId]];
+        boardCopy.splice(source.index, 1);
+        boardCopy.splice(destination?.index, 0, draggableId);
+        return {
+          ...allBoards,
+          [source.droppableId]: boardCopy,
+        };
+      });
+    }
   };
 
   // FIXME: 드랍할 때마다 Card 재렌더링 성능저하 문제
@@ -63,7 +71,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  max-width: 680px;
+  max-width: 80vw;
   margin: 0 auto;
   width: 100%;
   height: 100vh;
@@ -71,7 +79,7 @@ const Wrapper = styled.div`
   h1 {
     font-size: 30px;
     font-weight: 700;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
     color: white;
   }
 `;
@@ -79,7 +87,7 @@ const Wrapper = styled.div`
 const Boards = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 10px;
+  grid-gap: 15px;
   width: 100%;
 `;
 
