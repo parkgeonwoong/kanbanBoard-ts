@@ -35,6 +35,7 @@ const Card = styled.div`
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 10px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 `;
 
 // FIXME: 드래그할 때마다 Card 재렌더링 성능저하 문제

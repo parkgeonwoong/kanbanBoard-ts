@@ -13,6 +13,8 @@
  * 1. 드라그앤드라십 원하는 위치에 정렬하기
  * 2. 드랍할 때마다 Card 재렌더링 성능저하 문제
  * 3. 상태값 Object로 바뀐경우, 배열로 바꾸기
+ * 4. 이동시 droppable area 맨 아래까지 지정
+ * 5. board 떠날 때, 도착할 때 색상 바꾸기
  */
 
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
