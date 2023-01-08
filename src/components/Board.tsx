@@ -41,7 +41,7 @@ function Board({ toDos, boardId }: IBoardProps) {
 
 const Wrapper = styled.div`
   background-color: ${(props) => props.theme.boardColor};
-  padding: 20px 10px;
+  padding: 20px 5px;
   border-radius: 10px;
   min-height: 200px;
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
@@ -53,7 +53,8 @@ const Title = styled.h2`
   text-align: center;
   font-weight: 600;
   margin-bottom: 10px;
-  font-size: 18px;
+  font-size: 20px;
+  color: #ed4c67;
 `;
 
 interface IAreaProp {
@@ -62,7 +63,7 @@ interface IAreaProp {
 }
 
 const Area = styled.div<IAreaProp>`
-  padding: 5px;
+  padding: 10px;
   background-color: ${(props) =>
     props.isDraggingOver
       ? "opacity: 0.5; background-color: #f5f5f5;"
