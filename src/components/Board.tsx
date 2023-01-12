@@ -4,18 +4,50 @@
  */
 
 import { Droppable } from "react-beautiful-dnd";
+import { useForm } from "react-hook-form";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
+import { IToDo, toDoState } from "../atoms";
 import DraggableCard from "./DraggableCard";
 
 interface IBoardProps {
-  toDos: string[];
+  toDos: IToDo[];
   boardId: string;
 }
 
+interface IForm {
+  toDo: string;
+}
+
 function Board({ toDos, boardId }: IBoardProps) {
+  const SetToDos = useSetRecoilState(toDoState);
+
+  const { register, setValue, handleSubmit } = useForm<IForm>();
+  const onVaild = ({ toDo }: IForm) => {
+    const newToDo = {
+      id: Date.now(),
+      text: toDo,
+    };
+    SetToDos((allBoards) => {
+      return {
+        ...allBoards,
+        [boardId]: [newToDo, ...allBoards[boardId]],
+      };
+    });
+    setValue("toDo", "");
+  };
   return (
     <Wrapper>
       <Title>{boardId}</Title>
+      {/* Form으로 toDo 생성  */}
+      <Form onSubmit={handleSubmit(onVaild)}>
+        <input
+          {...register("toDo", { required: true })}
+          type="text"
+          placeholder={`${boardId} 입력하세요.`}
+        />
+      </Form>
+
       <Droppable droppableId={boardId}>
         {/* FIXME: board 떠날 때, 도착할 때 색상 바꾸기 */}
         {(provided, snapshot) => (
@@ -27,7 +59,12 @@ function Board({ toDos, boardId }: IBoardProps) {
           >
             {/* Draggable */}
             {toDos.map((toDo, index) => (
-              <DraggableCard key={toDo} toDo={toDo} index={index} />
+              <DraggableCard
+                key={toDo.id}
+                toDoId={toDo.id}
+                toDoText={toDo.text}
+                index={index}
+              />
             ))}
             {provided.placeholder}
           </Area>
@@ -55,6 +92,20 @@ const Title = styled.h2`
   margin-bottom: 10px;
   font-size: 20px;
   color: #ed4c67;
+`;
+
+const Form = styled.form`
+  width: 100%;
+  padding: 10px;
+
+  input {
+    width: 100%;
+    padding: 10px;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+  }
 `;
 
 interface IAreaProp {

@@ -32,6 +32,7 @@ function App() {
   const onDragEnd = (info: DropResult) => {
     console.log(info);
     const { destination, source, draggableId } = info;
+
     if (!destination) return;
 
     // 같은 보드에서 드랍할 때
@@ -39,8 +40,9 @@ function App() {
       // NOTE: setter에서 현재 상태를 복사한 뒤, splice로 이동할 아이템을 삭제하고, 이동할 위치에 아이템을 추가
       setToDos((allBoards) => {
         const boardCopy = [...allBoards[source.droppableId]];
+        const taskObj = boardCopy[source.index];
         boardCopy.splice(source.index, 1);
-        boardCopy.splice(destination?.index, 0, draggableId);
+        boardCopy.splice(destination?.index, 0, taskObj);
 
         return {
           ...allBoards,
@@ -53,9 +55,10 @@ function App() {
     if (destination?.droppableId !== source.droppableId) {
       setToDos((allBoards) => {
         const dragItem = [...allBoards[source.droppableId]];
+        const taskObj = dragItem[source.index];
         const dropItem = [...allBoards[destination.droppableId]];
         dragItem.splice(source.index, 1);
-        dropItem.splice(destination.index, 0, draggableId);
+        dropItem.splice(destination.index, 0, taskObj);
 
         return {
           ...allBoards,

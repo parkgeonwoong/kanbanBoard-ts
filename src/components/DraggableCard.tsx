@@ -8,15 +8,16 @@ import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 
 interface IDraggableCard {
-  toDo: string;
+  toDoId: number;
+  toDoText: string;
   index: number;
 }
 
-function DraggableCard({ toDo, index }: IDraggableCard) {
+function DraggableCard({ toDoId, toDoText, index }: IDraggableCard) {
   // NOTE: console.log(toDo, " :랜더링 이슈 확인");
 
   return (
-    <Draggable key={toDo} draggableId={toDo} index={index}>
+    <Draggable key={toDoId} draggableId={toDoId + ""} index={index}>
       {(provided, snapshot) => (
         <Card
           isDragging={snapshot.isDragging}
@@ -24,7 +25,7 @@ function DraggableCard({ toDo, index }: IDraggableCard) {
           {...provided.dragHandleProps}
           {...provided.draggableProps}
         >
-          {toDo}
+          {toDoText}
         </Card>
       )}
     </Draggable>
@@ -40,6 +41,11 @@ const Card = styled.div<{ isDragging: boolean }>`
     props.isDragging
       ? "rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;"
       : "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px"};
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 
 // FIXME: 드래그할 때마다 Card 재렌더링 성능저하 문제
