@@ -6,15 +6,6 @@
  */
 import { atom } from "recoil";
 
-interface IToDoState {
-  [key: string]: IToDo[];
-}
-
-export interface IToDo {
-  id: number;
-  text: string;
-}
-
 // FIXME: 로컬스토리지
 const localStorageEffect =
   (key: string) =>
@@ -33,6 +24,15 @@ const localStorageEffect =
 
 const LOCAL_STORAGE_KEY = "toDo";
 
+interface IToDoState {
+  [key: string]: IToDo[];
+}
+
+export interface IToDo {
+  id: number;
+  text: string;
+}
+
 //  NOTE: 보드가 1개라면 default가 배열이어도 상관없지만, 보드가 여러개라면 객체로 관리하는게 좋다.
 export const toDoState = atom<IToDoState>({
   key: "toDo",
@@ -42,4 +42,10 @@ export const toDoState = atom<IToDoState>({
     Done: [],
   },
   effects: [localStorageEffect(LOCAL_STORAGE_KEY)],
+});
+
+// 다크모드
+export const isDarkMode = atom({
+  key: "isDark",
+  default: false,
 });

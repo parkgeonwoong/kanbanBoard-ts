@@ -19,12 +19,18 @@
 
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
-import styled from "styled-components";
-import { toDoState } from "./model/atoms";
+import { isDarkMode, toDoState } from "./model/atoms";
 import Board from "./components/Board";
+
+import styled, { ThemeProvider } from "styled-components";
+import { darkTheme, lightTheme } from "./style/theme";
+import GlobalStyle from "./style/GlobalStyle";
+import { MdLightMode, MdModeNight } from "react-icons/md";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
+  const [isDark, setIsDark] = useRecoilState(isDarkMode);
 
   /* FIXME: 원하는 위치에 정렬:
     DragDropContext onDragEnd 매개변수에서 현재위치, 이동할 위치, 이동할 아이템 받아옴 
@@ -73,18 +79,43 @@ function App() {
 
   return (
     // DragDropContext
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Wrapper>
-        <h1>🆃oDo</h1>
-        <Boards>
-          {/* Droppable */}
-          {/* FIXME: Object로 상태가 바뀌어서 배열형태로 바꿔줘야 함 */}
-          {Object.keys(toDos).map((boardId) => (
-            <Board key={boardId} boardId={boardId} toDos={toDos[boardId]} />
-          ))}
-        </Boards>
-      </Wrapper>
-    </DragDropContext>
+    <>
+      <HelmetProvider>
+        <Helmet>
+          <title>TodoList</title>
+        </Helmet>
+
+        <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+          <GlobalStyle />
+
+          <h2 style={{ color: "black" }}>아 모르겠다</h2>
+
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Wrapper>
+              <h1>🆃oDo</h1>
+
+              {/* 보드 */}
+              <Boards>
+                {/* Droppable */}
+                {/* FIXME: Object로 상태가 바뀌어서 배열형태로 바꿔줘야 함 */}
+                {Object.keys(toDos).map((boardId) => (
+                  <Board
+                    key={boardId}
+                    boardId={boardId}
+                    toDos={toDos[boardId]}
+                  />
+                ))}
+              </Boards>
+            </Wrapper>
+          </DragDropContext>
+
+          {/* 다크모드 버튼 */}
+          <Mode onClick={() => setIsDark((prev) => !prev)}>
+            {isDark ? <MdLightMode /> : <MdModeNight />}
+          </Mode>
+        </ThemeProvider>
+      </HelmetProvider>
+    </>
   );
 }
 
@@ -103,7 +134,7 @@ const Wrapper = styled.div`
     font-size: 30px;
     font-weight: 700;
     margin-bottom: 50px;
-    color: white;
+    color: ${(props) => props.theme.textColor};
   }
 `;
 
@@ -112,6 +143,28 @@ const Boards = styled.div`
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 15px;
   width: 100%;
+`;
+
+const Mode = styled.button`
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: 1rem;
+  right: 1rem;
+  width: 3rem;
+  height: 3rem;
+  font-size: 25px;
+  border: none;
+  border-radius: 50%;
+  background-color: ${(props) => props.theme.textColor};
+  color: ${(props) => props.theme.bgColor};
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+
+  :hover {
+    opacity: 0.7;
+  }
 `;
 
 export default App;

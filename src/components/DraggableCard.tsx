@@ -65,7 +65,7 @@ const Card = styled.div<{ isDragging: boolean }>`
     props.isDragging
       ? "rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;"
       : "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px"};
-  transition: all 0.2s ease-in-out;
+  transition: opacity 0.2s ease-in-out;
   @media screen and (max-width: 768px) {
     padding: 10px;
   }

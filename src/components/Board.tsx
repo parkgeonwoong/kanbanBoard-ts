@@ -92,7 +92,7 @@ const Title = styled.h2`
   font-weight: 600;
   margin-bottom: 10px;
   font-size: 20px;
-  color: #ed4c67;
+  color: ${(props) => props.theme.titleColor};
 `;
 
 const Form = styled.form`
@@ -100,12 +100,22 @@ const Form = styled.form`
   padding: 10px;
 
   input {
+    background-color: ${(props) => props.theme.cardColor};
+    color: ${(props) => props.theme.textColor};
     width: 100%;
     padding: 10px;
     font-size: 12px;
     text-align: center;
     border-radius: 5px;
     border: none;
+
+    ::placeholder {
+      color: ${(props) => props.theme.textColor};
+
+      @media screen and (max-width: 768px) {
+        font-size: 5px;
+      }
+    }
   }
 `;
 
@@ -118,7 +128,7 @@ const Area = styled.div<IAreaProp>`
   padding: 10px;
   background-color: ${(props) =>
     props.isDraggingOver
-      ? "opacity: 0.5; background-color: #f5f5f5;"
+      ? `opacity: 0.2; background-color: ${props.theme.cardColor};`
       : props.draggingFromThisWith
       ? "transparent"
       : "transparent"};
