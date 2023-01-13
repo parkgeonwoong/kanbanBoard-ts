@@ -5,7 +5,7 @@
 
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { toDoState } from "../model/atoms";
 
@@ -66,19 +66,31 @@ const Card = styled.div<{ isDragging: boolean }>`
       ? "rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;"
       : "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px"};
   transition: all 0.2s ease-in-out;
+  @media screen and (max-width: 768px) {
+    padding: 10px;
+  }
 
   &:hover {
     opacity: 0.7;
   }
 `;
 
-const CardBox = styled.div``;
+const CardBox = styled.div`
+  @media screen and (max-width: 768px) {
+    font-size: 8px;
+  }
+`;
 
 const CardButton = styled.button`
   background-color: transparent;
   border: none;
   padding: 5px 10px;
   cursor: pointer;
+
+  @media screen and (max-width: 768px) {
+    width: 50%;
+    font-size: 8px;
+  }
 `;
 
 // FIXME: 드래그할 때마다 Card 재렌더링 성능저하 문제
