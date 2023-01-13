@@ -20,7 +20,7 @@
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { toDoState } from "./atoms";
+import { toDoState } from "./model/atoms";
 import Board from "./components/Board";
 
 function App() {
@@ -75,7 +75,7 @@ function App() {
     // DragDropContext
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
-        <h1>🆃rello</h1>
+        <h1>🆃oDo</h1>
         <Boards>
           {/* Droppable */}
           {/* FIXME: Object로 상태가 바뀌어서 배열형태로 바꿔줘야 함 */}

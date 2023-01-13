@@ -5,16 +5,34 @@
 
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
+import { toDoState } from "../model/atoms";
 
 interface IDraggableCard {
   toDoId: number;
   toDoText: string;
   index: number;
+  boardId: string;
 }
 
-function DraggableCard({ toDoId, toDoText, index }: IDraggableCard) {
+function DraggableCard({ toDoId, toDoText, index, boardId }: IDraggableCard) {
   // NOTE: console.log(toDo, " :랜더링 이슈 확인");
+
+  const setToDos = useSetRecoilState(toDoState);
+
+  // FIXME: 삭제 버튼 클릭 시, 해당 아이템 삭제
+  const handleDelete = () => {
+    setToDos((prev) => {
+      let newTodos = { ...prev };
+
+      newTodos[boardId] = newTodos[boardId].filter(
+        (toDo) => toDo.id !== toDoId
+      );
+
+      return { ...newTodos };
+    });
+  };
 
   return (
     <Draggable key={toDoId} draggableId={toDoId + ""} index={index}>
@@ -25,7 +43,10 @@ function DraggableCard({ toDoId, toDoText, index }: IDraggableCard) {
           {...provided.dragHandleProps}
           {...provided.draggableProps}
         >
-          {toDoText}
+          <CardBox>👉 {toDoText}</CardBox>
+          <CardBox>
+            <CardButton onClick={handleDelete}>❌</CardButton>
+          </CardBox>
         </Card>
       )}
     </Draggable>
@@ -34,6 +55,9 @@ function DraggableCard({ toDoId, toDoText, index }: IDraggableCard) {
 
 const Card = styled.div<{ isDragging: boolean }>`
   background-color: ${(props) => props.theme.cardColor};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 10px;
@@ -46,6 +70,15 @@ const Card = styled.div<{ isDragging: boolean }>`
   &:hover {
     opacity: 0.7;
   }
+`;
+
+const CardBox = styled.div``;
+
+const CardButton = styled.button`
+  background-color: transparent;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
 `;
 
 // FIXME: 드래그할 때마다 Card 재렌더링 성능저하 문제

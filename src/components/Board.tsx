@@ -7,7 +7,7 @@ import { Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { IToDo, toDoState } from "../atoms";
+import { IToDo, toDoState } from "../model/atoms";
 import DraggableCard from "./DraggableCard";
 
 interface IBoardProps {
@@ -64,6 +64,7 @@ function Board({ toDos, boardId }: IBoardProps) {
                 toDoId={toDo.id}
                 toDoText={toDo.text}
                 index={index}
+                boardId={boardId}
               />
             ))}
             {provided.placeholder}
