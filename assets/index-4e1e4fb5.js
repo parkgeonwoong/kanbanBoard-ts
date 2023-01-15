@@ -135,6 +135,7 @@ Error generating stack: `+i.message+`
     opacity: 0.7;
   }
 `,$g=ir.div`
+  background-color: transparent;
   @media screen and (max-width: 768px) {
     font-size: 8px;
   }
@@ -162,6 +163,7 @@ Error generating stack: `+i.message+`
   margin-bottom: 10px;
   font-size: 20px;
   color: ${e=>e.theme.titleColor};
+  background-color: transparent;
 `,MM=ir.form`
   width: 100%;
   padding: 10px;
@@ -275,7 +277,7 @@ color: inherit;
       font-size: 13px;
     }
   }
-`;function v$(){const[e,t]=kh(Wp),[r,n]=kh(bL);return $e(zw,{children:Cr(fo,{children:[$e(Tl,{children:$e("title",{children:"TodoList"})}),Cr(TM,{theme:r?FM:BM,children:[$e(UM,{}),$e(f$,{}),$e(IO,{onDragEnd:i=>{console.log(i);const{destination:a,source:l,draggableId:s}=i;a&&((a==null?void 0:a.droppableId)===l.droppableId&&t(u=>{const d=[...u[l.droppableId]],c=d[l.index];return d.splice(l.index,1),d.splice(a==null?void 0:a.index,0,c),{...u,[l.droppableId]:d}}),(a==null?void 0:a.droppableId)!==l.droppableId&&t(u=>{const d=[...u[l.droppableId]],c=d[l.index],f=[...u[a.droppableId]];return d.splice(l.index,1),f.splice(a.index,0,c),{...u,[l.droppableId]:d,[a.droppableId]:f}}))},children:Cr(h$,{children:[$e("h1",{children:"🆃oDo"}),$e(g$,{children:Object.keys(e).map(i=>$e(NM,{boardId:i,toDos:e[i]},i))})]})}),$e(m$,{onClick:()=>n(i=>!i),children:r?$e(WM,{}):$e(HM,{})})]})]})})}const h$=ir.div`
+`;function v$(){const[e,t]=kh(Wp),[r,n]=kh(bL);return $e(zw,{children:Cr(fo,{children:[$e(Tl,{children:$e("title",{children:"TodoList"})}),Cr(TM,{theme:r?FM:BM,children:[$e(UM,{}),$e(f$,{}),$e(IO,{onDragEnd:i=>{console.log(i);const{destination:a,source:l,draggableId:s}=i;a&&((a==null?void 0:a.droppableId)===l.droppableId&&t(u=>{const d=[...u[l.droppableId]],c=d[l.index];return d.splice(l.index,1),d.splice(a==null?void 0:a.index,0,c),{...u,[l.droppableId]:d}}),(a==null?void 0:a.droppableId)!==l.droppableId&&t(u=>{const d=[...u[l.droppableId]],c=d[l.index],f=[...u[a.droppableId]];return d.splice(l.index,1),f.splice(a.index,0,c),{...u,[l.droppableId]:d,[a.droppableId]:f}}))},children:Cr(h$,{children:[$e("h1",{children:"🆃oDo - v2"}),$e(g$,{children:Object.keys(e).map(i=>$e(NM,{boardId:i,toDos:e[i]},i))})]})}),$e(m$,{onClick:()=>n(i=>!i),"aria-label":"mode",children:r?$e(WM,{}):$e(HM,{})})]})]})})}const h$=ir.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
