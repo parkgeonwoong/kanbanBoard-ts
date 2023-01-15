@@ -27,6 +27,7 @@ import { darkTheme, lightTheme } from "./style/theme";
 import GlobalStyle from "./style/GlobalStyle";
 import { MdLightMode, MdModeNight } from "react-icons/md";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import Weather from "./components/Weather";
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
@@ -88,7 +89,7 @@ function App() {
         <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
           <GlobalStyle />
 
-          <h2 style={{ color: "black" }}>아 모르겠다</h2>
+          <Weather />
 
           <DragDropContext onDragEnd={onDragEnd}>
             <Wrapper>
@@ -128,7 +129,7 @@ const Wrapper = styled.div`
   max-width: 60vw;
   margin: 0 auto;
   width: 100%;
-  height: 100vh;
+  height: 80vh;
 
   h1 {
     font-size: 30px;
