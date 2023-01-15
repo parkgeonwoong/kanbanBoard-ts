@@ -76,6 +76,7 @@ const Card = styled.div<{ isDragging: boolean }>`
 `;
 
 const CardBox = styled.div`
+  background-color: transparent;
   @media screen and (max-width: 768px) {
     font-size: 8px;
   }

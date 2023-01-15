@@ -93,6 +93,7 @@ const Title = styled.h2`
   margin-bottom: 10px;
   font-size: 20px;
   color: ${(props) => props.theme.titleColor};
+  background-color: transparent;
 `;
 
 const Form = styled.form`

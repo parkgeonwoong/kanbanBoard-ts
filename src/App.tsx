@@ -93,7 +93,7 @@ function App() {
 
           <DragDropContext onDragEnd={onDragEnd}>
             <Wrapper>
-              <h1>🆃oDo</h1>
+              <h1>🆃oDo - v2</h1>
 
               {/* 보드 */}
               <Boards>
@@ -111,7 +111,7 @@ function App() {
           </DragDropContext>
 
           {/* 다크모드 버튼 */}
-          <Mode onClick={() => setIsDark((prev) => !prev)}>
+          <Mode onClick={() => setIsDark((prev) => !prev)} aria-label="mode">
             {isDark ? <MdLightMode /> : <MdModeNight />}
           </Mode>
         </ThemeProvider>
