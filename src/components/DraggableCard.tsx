@@ -3,10 +3,10 @@
  * DragDropContext > Droppable > Draggable 순으로 감싸야함
  * TODO:
  * - 삭제 기능
- * - 수정 기능
+ * - 수정 기능, 수정시 포커싱
  */
 
-import React, { ChangeEvent, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
@@ -24,9 +24,16 @@ function DraggableCard({ toDoId, toDoText, index, boardId }: IDraggableCard) {
   // NOTE: console.log(toDo, " :랜더링 이슈 확인");
   const setToDos = useSetRecoilState(toDoState);
   const [isEdit, setIsEdit] = useState(false);
+  const editInputRef = useRef<HTMLInputElement>(null);
 
-  // TODO: 수정기능
-  const handleEdit = () => {
+  // TODO: 수정시 포커싱
+  useEffect(() => {
+    if (editInputRef.current !== null) {
+      editInputRef.current.focus();
+    }
+  }, [isEdit]);
+
+  const modalToggle = () => {
     setIsEdit((prev) => !prev);
   };
 
@@ -35,18 +42,17 @@ function DraggableCard({ toDoId, toDoText, index, boardId }: IDraggableCard) {
     setIsEdit((prev) => !prev);
   };
 
-  const onChangeEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // TODO: 수정기능
+  const handleEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
     // setNewText(e.currentTarget.value);
     setToDos((prev) => {
       let changeText = { ...prev };
-      console.log(changeText);
 
       changeText[boardId] = changeText[boardId].map((toDo) => {
-        if (toDo.id === toDoId) {
-          return { ...toDo, text: e.currentTarget.value };
-        }
+        if (toDo.id === toDoId) return { ...toDo, text: e.currentTarget.value };
         return toDo;
       });
+
       return { ...changeText };
     });
   };
@@ -75,8 +81,8 @@ function DraggableCard({ toDoId, toDoText, index, boardId }: IDraggableCard) {
         >
           <CardBox>👉 {toDoText}</CardBox>
           <CardBox>
-            <CardButton onClick={handleEdit}>
-              <BiMessageSquareEdit size="20" />
+            <CardButton onClick={modalToggle}>
+              <EditBtn size="20" />
             </CardButton>
             <CardButton onClick={handleDelete}>❌</CardButton>
           </CardBox>
@@ -84,9 +90,10 @@ function DraggableCard({ toDoId, toDoText, index, boardId }: IDraggableCard) {
           {isEdit ? (
             <Modal onSubmit={handleSubmit}>
               <input
-                onChange={onChangeEdit}
+                onChange={handleEdit}
                 type="text"
                 defaultValue={toDoText}
+                ref={editInputRef}
               />
             </Modal>
           ) : null}
@@ -95,6 +102,10 @@ function DraggableCard({ toDoId, toDoText, index, boardId }: IDraggableCard) {
     </Draggable>
   );
 }
+
+const EditBtn = styled(BiMessageSquareEdit)`
+  color: ${(props) => props.theme.textColor};
+`;
 
 const Modal = styled.form`
   width: 100%;
