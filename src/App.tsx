@@ -28,6 +28,7 @@ import GlobalStyle from "./style/GlobalStyle";
 import { MdLightMode, MdModeNight } from "react-icons/md";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import Weather from "./components/Weather";
+import { motion } from "framer-motion";
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
@@ -111,7 +112,11 @@ function App() {
           </DragDropContext>
 
           {/* 다크모드 버튼 */}
-          <Mode onClick={() => setIsDark((prev) => !prev)} aria-label="mode">
+          <Mode
+            onClick={() => setIsDark((prev) => !prev)}
+            aria-label="mode"
+            whileHover={{ y: -5, transition: { type: "spring", bounce: 0.5 } }}
+          >
             {isDark ? <MdLightMode /> : <MdModeNight />}
           </Mode>
         </ThemeProvider>
@@ -146,7 +151,7 @@ const Boards = styled.div`
   width: 100%;
 `;
 
-const Mode = styled.button`
+const Mode = styled(motion.button)`
   position: fixed;
   display: flex;
   justify-content: center;

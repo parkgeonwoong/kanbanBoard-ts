@@ -9,6 +9,7 @@ import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { IToDo, toDoState } from "../model/atoms";
 import DraggableCard from "./DraggableCard";
+import { motion } from "framer-motion";
 
 interface IBoardProps {
   toDos: IToDo[];
@@ -41,10 +42,11 @@ function Board({ toDos, boardId }: IBoardProps) {
       <Title>{boardId}</Title>
       {/* Form으로 toDo 생성  */}
       <Form onSubmit={handleSubmit(onVaild)}>
-        <input
+        <motion.input
           {...register("toDo", { required: true })}
           type="text"
           placeholder={`${boardId} 입력하세요.`}
+          whileHover={{ fontSize: "14px" }}
         />
       </Form>
 

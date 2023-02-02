@@ -12,6 +12,8 @@ import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { toDoState } from "../model/atoms";
 import { BiMessageSquareEdit } from "react-icons/bi";
+import { TbDragDrop } from "react-icons/tb";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface IDraggableCard {
   toDoId: number;
@@ -79,7 +81,9 @@ function DraggableCard({ toDoId, toDoText, index, boardId }: IDraggableCard) {
           {...provided.dragHandleProps}
           {...provided.draggableProps}
         >
-          <CardBox>👉 {toDoText}</CardBox>
+          <CardBox>
+            <TbDragDrop size="20" /> &nbsp; {toDoText}
+          </CardBox>
           <CardBox>
             <CardButton onClick={modalToggle}>
               <EditBtn size="20" />
@@ -87,16 +91,21 @@ function DraggableCard({ toDoId, toDoText, index, boardId }: IDraggableCard) {
             <CardButton onClick={handleDelete}>❌</CardButton>
           </CardBox>
 
-          {isEdit ? (
-            <Modal onSubmit={handleSubmit}>
-              <input
-                onChange={handleEdit}
-                type="text"
-                defaultValue={toDoText}
-                ref={editInputRef}
-              />
-            </Modal>
-          ) : null}
+          <AnimatePresence>
+            {isEdit ? (
+              <Modal onSubmit={handleSubmit}>
+                <motion.input
+                  onChange={handleEdit}
+                  type="text"
+                  defaultValue={toDoText}
+                  ref={editInputRef}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1, transition: { duration: 0.3 } }}
+                  exit={{ scale: 0, transition: { duration: 0.3 } }}
+                />
+              </Modal>
+            ) : null}
+          </AnimatePresence>
         </Card>
       )}
     </Draggable>
@@ -107,7 +116,7 @@ const EditBtn = styled(BiMessageSquareEdit)`
   color: ${(props) => props.theme.textColor};
 `;
 
-const Modal = styled.form`
+const Modal = styled(motion.form)`
   width: 100%;
   height: 100%;
   position: absolute;
@@ -125,6 +134,7 @@ const Modal = styled.form`
     border-radius: 10px;
     padding: 10px;
     font-size: 15px;
+    outline: none;
   }
 `;
 
