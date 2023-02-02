@@ -1,13 +1,17 @@
 /**
  * @desc : 드래그할 컴포넌트
  * DragDropContext > Droppable > Draggable 순으로 감싸야함
+ * TODO:
+ * - 삭제 기능
+ * - 수정 기능
  */
 
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { toDoState } from "../model/atoms";
+import { BiMessageSquareEdit } from "react-icons/bi";
 
 interface IDraggableCard {
   toDoId: number;
@@ -18,8 +22,34 @@ interface IDraggableCard {
 
 function DraggableCard({ toDoId, toDoText, index, boardId }: IDraggableCard) {
   // NOTE: console.log(toDo, " :랜더링 이슈 확인");
-
   const setToDos = useSetRecoilState(toDoState);
+  const [isEdit, setIsEdit] = useState(false);
+
+  // TODO: 수정기능
+  const handleEdit = () => {
+    setIsEdit((prev) => !prev);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsEdit((prev) => !prev);
+  };
+
+  const onChangeEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // setNewText(e.currentTarget.value);
+    setToDos((prev) => {
+      let changeText = { ...prev };
+      console.log(changeText);
+
+      changeText[boardId] = changeText[boardId].map((toDo) => {
+        if (toDo.id === toDoId) {
+          return { ...toDo, text: e.currentTarget.value };
+        }
+        return toDo;
+      });
+      return { ...changeText };
+    });
+  };
 
   // FIXME: 삭제 버튼 클릭 시, 해당 아이템 삭제
   const handleDelete = () => {
@@ -45,13 +75,47 @@ function DraggableCard({ toDoId, toDoText, index, boardId }: IDraggableCard) {
         >
           <CardBox>👉 {toDoText}</CardBox>
           <CardBox>
+            <CardButton onClick={handleEdit}>
+              <BiMessageSquareEdit size="20" />
+            </CardButton>
             <CardButton onClick={handleDelete}>❌</CardButton>
           </CardBox>
+
+          {isEdit ? (
+            <Modal onSubmit={handleSubmit}>
+              <input
+                onChange={onChangeEdit}
+                type="text"
+                defaultValue={toDoText}
+              />
+            </Modal>
+          ) : null}
         </Card>
       )}
     </Draggable>
   );
 }
+
+const Modal = styled.form`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+
+  input {
+    width: 300px;
+    height: 50px;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 15px;
+  }
+`;
 
 const Card = styled.div<{ isDragging: boolean }>`
   background-color: ${(props) => props.theme.cardColor};
@@ -77,6 +141,9 @@ const Card = styled.div<{ isDragging: boolean }>`
 
 const CardBox = styled.div`
   background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   @media screen and (max-width: 768px) {
     font-size: 8px;
   }
